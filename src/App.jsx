@@ -11,14 +11,16 @@ function App() {
   const firstRun = useRef(true)
 
   useEffect(() => {
-    let isTasksPresent = localStorage.getItem("savedTasks")
-    if (isTasksPresent !== "[]") {
-      let savedTasks = JSON.parse(localStorage.getItem("savedTasks"))
-      setTasks(savedTasks)
-      console.log(savedTasks)
-      console.log(`i m running first time`)
+    const stored = localStorage.getItem("savedTasks");
+
+    if (stored) {
+      const savedTasks = JSON.parse(stored);
+
+      if (Array.isArray(savedTasks)) {
+        setTasks(savedTasks);
+      }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (firstRun.current) {
@@ -50,7 +52,6 @@ function App() {
       )
       setTasks(newTasks)
     }
-    saveToLS(tasks)
   }
 
   const handleDelete = (id, e) => {
@@ -61,7 +62,6 @@ function App() {
     let isConfirmed = confirm("Are you sure you want to delete this Task?")
     if (isConfirmed) {
       setTasks(newTasks)
-      saveToLS(tasks)
     } else {
     }
   }
@@ -87,11 +87,10 @@ function App() {
     newTasks[index].isCompleted = !newTasks[index].isCompleted
     setTasks(newTasks)
     console.log(newTasks)
-    saveToLS(tasks)
   }
 
-  const saveToLS = (tasks) => {
-    localStorage.setItem("savedTasks", JSON.stringify(tasks));
+  const saveToLS = (data) => {
+    localStorage.setItem("savedTasks", JSON.stringify(data));
     console.log(`Task saved. Task saved is :`)
     console.log(tasks)
   };
