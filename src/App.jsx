@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Navbar from './components/Navbar'
 import './App.css'
@@ -8,16 +8,30 @@ function App() {
   const [task, setTask] = useState("")
   const [tasks, setTasks] = useState([])
   const [showFinished, setshowFinished] = useState(false)
+  const firstRun = useRef(true)
 
   useEffect(() => {
-    let tasksString = localStorage.getItem("tasks")
-    if (tasksString) {
-      let tasks = JSON.parse(localStorage.getItem("tasks"))
-      setTasks(tasks)
-    } else {
-
+    let isTasksPresent = localStorage.getItem("savedTasks")
+    if (isTasksPresent !== "[]") {
+      let savedTasks = JSON.parse(localStorage.getItem("savedTasks"))
+      setTasks(savedTasks)
+      console.log(savedTasks)
+      console.log(`i m running first time`)
     }
   }, [])
+
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+
+    saveToLS(tasks);
+    console.log("i am useeffect save");
+  }, [tasks]);
+
+
+
 
   const handleEdit = (id, e) => {
     if (task.length != 0) {
@@ -36,7 +50,7 @@ function App() {
       )
       setTasks(newTasks)
     }
-    saveToLS()
+    saveToLS(tasks)
   }
 
   const handleDelete = (id, e) => {
@@ -47,15 +61,16 @@ function App() {
     let isConfirmed = confirm("Are you sure you want to delete this Task?")
     if (isConfirmed) {
       setTasks(newTasks)
+      saveToLS(tasks)
     } else {
     }
-    saveToLS()
   }
 
   const handleAdd = () => {
     setTasks([...tasks, { id: uuidv4(), task, isCompleted: false, }])
     setTask("")
-    saveToLS()
+    console.log(`Task Added. Task is :`)
+    console.log(tasks)
   }
 
   const handleChange = (e) => {
@@ -72,11 +87,14 @@ function App() {
     newTasks[index].isCompleted = !newTasks[index].isCompleted
     setTasks(newTasks)
     console.log(newTasks)
+    saveToLS(tasks)
   }
 
-  const saveToLS = () => {
-    localStorage.setItem("tasks", JSON.stringify(tasks))
-  }
+  const saveToLS = (tasks) => {
+    localStorage.setItem("savedTasks", JSON.stringify(tasks));
+    console.log(`Task saved. Task saved is :`)
+    console.log(tasks)
+  };
 
   const toggleFinished = () => {
     setshowFinished(!showFinished)
@@ -86,7 +104,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="container w-[90%] mx-auto my-5 md: max-w-[50%]">
+      <div className="container w-[90%] mx-auto my-5 lg:max-w-[50%]">
 
         <div className='add-task-container'>
           <h2>Add Task</h2>
@@ -114,12 +132,12 @@ function App() {
           <div className="tasks">
             {tasks.length == 0 && <div>No Tasks to display</div>}
             {tasks.map(item => {
-              return (showFinished || !item.isCompleted) && <div key={item.id} className='flex item-center justify-between p-3 bg-gray-300 rounded-lg my-2'>
+              return (showFinished || !item.isCompleted) && <div key={item.id} className='flex flex-col item-center justify-between p-3 bg-gray-300 rounded-lg my-2 sm:flex-row '>
                 <div className="text-box flex gap-2 item-center">
                   <input className="w-5 flex-shrink-0" onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id={item.id} />
-                  <div className={`px-5 justify flex items-center ${item.isCompleted ? "line-through" : ""}`}>{item.task}</div>
+                  <div className={`px-1 sm:px-5 justify flex items-center text-wrap ${item.isCompleted ? "line-through" : ""}`}>{item.task}</div>
                 </div>
-                <div className="buttons flex justify-between items-center gap-5">
+                <div className="buttons flex justify-end items-center gap-5 sm:justify-between">
                   <button onClick={(e) => handleEdit(item.id, e)} value={item.task} className='bg-blue-600 rounded-md py-1 px-2 my-2 text-white  hover:bg-blue-800'>Edit</button>
                   <button onClick={(e) => handleDelete(item.id, e)} className='bg-blue-600 rounded-md py-1 px-2 my-2 text-white  hover:bg-blue-800'>Delete</button>
                 </div>
