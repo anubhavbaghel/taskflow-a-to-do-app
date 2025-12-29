@@ -7,7 +7,7 @@ function App() {
 
   const [task, setTask] = useState("")
   const [tasks, setTasks] = useState([])
-  const [showFinished, setshowFinished] = useState(false)
+  const [showFinished, setshowFinished] = useState(true)
   const firstRun = useRef(true)
 
   useEffect(() => {
