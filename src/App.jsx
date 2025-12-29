@@ -103,7 +103,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="container w-[90%] mx-auto my-5 lg:max-w-[50%]">
+      <div className="container w-[90%] mx-auto my-5 lg:max-w-[50%] bg-[#FFFFFF] p-4 rounded-2xl">
 
         <div className='add-task-container'>
           <h2>Add Task</h2>
