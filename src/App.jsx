@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Navbar from './components/Navbar'
+import Footer from './components/Footer';
 import './App.css'
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
     }
 
     saveToLS(tasks);
-    console.log("i am useeffect save");
+    // console.log("i am useeffect save");
   }, [tasks]);
 
 
@@ -69,8 +70,8 @@ function App() {
   const handleAdd = () => {
     setTasks([...tasks, { id: uuidv4(), task, isCompleted: false, }])
     setTask("")
-    console.log(`Task Added. Task is :`)
-    console.log(tasks)
+    // console.log(`Task Added. Task is :`)
+    // console.log(tasks)
   }
 
   const handleChange = (e) => {
@@ -86,13 +87,13 @@ function App() {
     let newTasks = [...tasks]
     newTasks[index].isCompleted = !newTasks[index].isCompleted
     setTasks(newTasks)
-    console.log(newTasks)
+    // console.log(newTasks)
   }
 
   const saveToLS = (data) => {
     localStorage.setItem("savedTasks", JSON.stringify(data));
-    console.log(`Task saved. Task saved is :`)
-    console.log(tasks)
+    // console.log(`Task saved. Task saved is :`)
+    // console.log(tasks)
   };
 
   const toggleFinished = () => {
@@ -147,6 +148,7 @@ function App() {
 
         </div>
       </div>
+      <Footer/>
     </>
   )
 }
