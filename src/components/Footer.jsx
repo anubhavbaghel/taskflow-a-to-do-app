@@ -7,7 +7,7 @@ import { FaGithub } from "react-icons/fa";
 
 const Footer = () => {
     return (
-        <div className="flex flex-col items-center py-2 px-4 sticky bottom-0 bg-white">
+        <div className="flex flex-col items-center py-2 px-4 fixed bottom-0 left-0 right-0 bg-white">
             <div className='flex items-center gap-2'>
                 Made with <FaHeart className='text-red-600'/> by Anubhav
             </div>
